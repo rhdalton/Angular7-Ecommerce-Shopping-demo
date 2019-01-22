@@ -10,8 +10,8 @@ import 'rxjs/add/operator/switchMap';
   styleUrls: ['./products.component.css']
 })
 export class ProductsComponent {
-  products: any[] = [];
-  filteredProducts: any[] = [];
+  products: Product[] = [];
+  filteredProducts: Product[] = [];
 
   category: string;
 
@@ -28,7 +28,7 @@ export class ProductsComponent {
         this.category = params.get('category');
 
         this.filteredProducts = (this.category) ?
-          this.products.filter(p => p.data.category === this.category) :
+          this.products.filter(p => p.category === this.category) :
           this.products;
       });
    }
