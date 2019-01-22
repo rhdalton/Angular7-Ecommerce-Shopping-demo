@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireDatabase } from '@angular/fire/database';
 import { Product } from './models/product';
 
 @Injectable({
@@ -18,9 +18,9 @@ export class ProductService {
     // return database items as key, data-obj pairs
     .map(items => {
       return items.map(a => {
-        const data = a.payload.val();
-        const pid = a.key;
-        return { pid, data };
+        const data = a.payload.val() as Product;
+        data.key = a.key;
+        return data;
       });
     });
   }
@@ -37,3 +37,5 @@ export class ProductService {
     return this.db.object('/products/' + productId).remove();
   }
 }
+
+

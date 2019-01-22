@@ -13,6 +13,7 @@ export class ProductFormComponent implements OnInit {
   categories$;
   // set default property values for product obj
   product: Product = {
+    key: '',
     name: '',
     price: 0,
     category: '',
