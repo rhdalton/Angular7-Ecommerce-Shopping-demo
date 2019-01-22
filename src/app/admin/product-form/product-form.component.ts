@@ -11,7 +11,13 @@ import { Product } from 'src/app/models/product';
 })
 export class ProductFormComponent implements OnInit {
   categories$;
-  product = {};
+  // set default property values for product obj
+  product: Product = {
+    name: '',
+    price: 0,
+    category: '',
+    image: ''
+  };
   id;
 
   constructor(
@@ -27,7 +33,6 @@ export class ProductFormComponent implements OnInit {
         .valueChanges()
         .subscribe((p: Product) => this.product = p);
     }
-    console.log(this.product);
   }
 
   save(product) {
