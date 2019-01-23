@@ -3,7 +3,7 @@
 This is a demo E-Commerce Shopping app in Angular 7 and deployed on Firebase to show common functionality of Angular and Typescript.
 You can see the current deployment at https://ec-shop-demo.firebaseapp.com/
 
-NOTE: This is an on-going personal project I am currently working on to learn and use Angular in a development and production environments.
+NOTE: This is an on-going personal project I am currently coding to learn and use Angular.
 
 **Current Features:**
 - Product catelog with name, image, price and details
