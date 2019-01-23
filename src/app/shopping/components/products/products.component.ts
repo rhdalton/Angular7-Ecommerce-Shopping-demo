@@ -31,8 +31,8 @@ export class ProductsComponent implements OnInit {
 
    private applyFilter() {
     this.filteredProducts = (this.category) ?
-    this.products.filter(p => p.category === this.category) :
-    this.products;
+      this.products.filter(p => p.category === this.category) :
+      this.products;
    }
 
    private populateProducts() {

@@ -15,10 +15,10 @@
     </thead>
     <tbody>
         <tr *ngFor="let p of filterProducts">
-            <td>{{ p.data.name }}</td>
-            <td>{{ p.data.price | currency }}</td>
+            <td>{{ p.name }}</td>
+            <td>{{ p.price | currency }}</td>
             <td>
-                <a [routerLink]="['/admin/products/', p.pid]">Edit</a>
+                <a [routerLink]="['/admin/products/', p.key]">Edit</a>
             </td>
         </tr>
     </tbody>

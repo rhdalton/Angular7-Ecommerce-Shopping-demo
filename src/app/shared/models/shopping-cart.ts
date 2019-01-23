@@ -4,15 +4,15 @@ import { Product } from './product';
 export class ShoppingCart {
     items: ShoppingCartItem[] = [];
 
-    constructor(private itemsMap: { [productId: string]: ShoppingCartItem }) {
-        this.itemsMap = itemsMap || {};
+    constructor(private itemsMap: ShoppingCart) {
+        this.itemsMap = itemsMap;
 
-        for (let productId in itemsMap) {
-            let item = itemsMap[productId];
+        for (let entry in itemsMap.items) {
+            let item = itemsMap.items[entry];
             this.items.push(new ShoppingCartItem({
                 // use spread operator to assign properties to ShoppingCartItem
                 ...item,
-                key: productId
+                key: entry
             }));
         }
     }
@@ -33,7 +33,7 @@ export class ShoppingCart {
     }
 
     getQuantity(product: Product) {
-        let item = this.itemsMap[product.key];
+        let item = this.itemsMap.items[product.key];
         return item ? item.quantity : 0;
     }
 }
