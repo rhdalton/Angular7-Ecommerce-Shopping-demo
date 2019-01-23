@@ -17,11 +17,17 @@ export class ShoppingCartService {
     });
   }
 
-  private getCart(cartId: string) {
+  async getCart() {
+    let cartId = await this.getOrCreateCartId();
     return this.db.object('/shopping-carts/' + cartId);
   }
 
-  private async getOrCreateCartId() {
+  // Get product item in current cart
+  private getItem(cartId: string, productId: string) {
+    return this.db.object('/shopping-carts/' + cartId + '/items/' + productId) as any;
+  }
+
+  private async getOrCreateCartId(): Promise<string> {
     let cartId = localStorage.getItem('cartId');
 
     // return current cart Id
@@ -34,19 +40,26 @@ export class ShoppingCartService {
   }
 
   async addToCart(product: Product) {
+    this.updateItemQuantity(product, 1);
+  }
+
+  async removeFromCart(product: Product) {
+    this.updateItemQuantity(product, -1);
+  }
+
+  private async updateItemQuantity(product: Product, change: number) {
     // get cart Id of current user
     let cartId = await this.getOrCreateCartId();
-    // get product object of current cart
-    let item$: any = this.db.object('/shopping-carts/' + cartId + '/items/' + product.key);
-    //console.log(item$);
+    // get cart item
+    let item$ = this.getItem(cartId, product.key);
+
     item$.valueChanges().pipe(take(1)).subscribe(item => {
       // if item exists, update quantity
-      if (item !== null) {
-        item$.update({ quantity: item.quantity + 1 });
-      } else {
+      if (item !== null)
+        item$.update({ quantity: item.quantity + change });
+      else
         // add item object to cart
-        item$.set({ product: product, quantity: 1 });
-      }
+        item$.update({ product: product, quantity: 1 });
     });
   }
 }
