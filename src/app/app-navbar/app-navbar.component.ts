@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from './../auth.service';
 import { AppUser } from './../models/app-user';
 import { ShoppingCartService } from '../shopping-cart.service';
+import { Observable } from 'rxjs';
+import { ShoppingCart } from '../models/shopping-cart';
+import { AngularFireObject } from 'angularfire2/database';
 
 @Component({
   selector: 'app-navbar',
@@ -10,19 +13,14 @@ import { ShoppingCartService } from '../shopping-cart.service';
 })
 export class AppNavbarComponent implements OnInit {
   appUser: AppUser;
-  shoppingCartItemCount: number;
+  cart$: Observable<ShoppingCart>;
 
   constructor(private auth: AuthService, private shoppingCart: ShoppingCartService) {
   }
 
   async ngOnInit() {
     this.auth.appUser$.subscribe(appUser => this.appUser = appUser);
-    let cart$: any = await this.shoppingCart.getCart();
-    cart$.valueChanges().subscribe(cart => {
-      this.shoppingCartItemCount = 0;
-      for (let productId in cart.items)
-        this.shoppingCartItemCount += cart.items[productId].quantity;
-    });
+    this.cart$ = await this.shoppingCart.getCart();
   }
 
   logout() {

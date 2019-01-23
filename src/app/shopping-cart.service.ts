@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 import { Product } from './models/product';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { ShoppingCart } from './models/shopping-cart';
+import { ShoppingCartItem } from './models/shopping-cart-item';
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +13,30 @@ export class ShoppingCartService {
 
   constructor(private db: AngularFireDatabase) { }
 
+  async getCart(): Promise<Observable<ShoppingCart>> {
+    let cartId = await this.getOrCreateCartId();
+    return this.db.object('/shopping-carts/' + cartId)
+      .valueChanges()
+      .map((x: ShoppingCart) => new ShoppingCart(x.items));
+  }
+
+  async addToCart(product: Product) {
+    this.updateItem(product, 1);
+  }
+
+  async removeFromCart(product: Product) {
+    this.updateItem(product, -1);
+  }
+
+  async clearCart() {
+    let cartId = await this.getOrCreateCartId();
+    this.db.object('/shopping-carts/' + cartId + '/items').remove();
+  }
+
   private create() {
     return this.db.list('/shopping-carts').push({
       dateCreated: new Date().getTime()
     });
-  }
-
-  async getCart() {
-    let cartId = await this.getOrCreateCartId();
-    return this.db.object('/shopping-carts/' + cartId);
   }
 
   // Get product item in current cart
@@ -39,27 +56,28 @@ export class ShoppingCartService {
     return result.key;
   }
 
-  async addToCart(product: Product) {
-    this.updateItemQuantity(product, 1);
-  }
-
-  async removeFromCart(product: Product) {
-    this.updateItemQuantity(product, -1);
-  }
-
-  private async updateItemQuantity(product: Product, change: number) {
+  private async updateItem(product: Product, change: number) {
     // get cart Id of current user
     let cartId = await this.getOrCreateCartId();
     // get cart item
     let item$ = this.getItem(cartId, product.key);
 
     item$.valueChanges().pipe(take(1)).subscribe(item => {
-      // if item exists, update quantity
-      if (item !== null)
-        item$.update({ quantity: item.quantity + change });
-      else
-        // add item object to cart
-        item$.update({ product: product, quantity: 1 });
+      let newQuantity = 1; // set to 1 for new item
+      // if item exists, set newQuantity +1 to current quantity
+      if (item !== null) newQuantity = item.quantity + change;
+
+      // if newQuantity 0, remove object from observable
+      if (newQuantity === 0) item$.remove();
+      // else update observable
+      else {
+        item$.update({
+          name: product.name,
+          image: product.image,
+          price: product.price,
+          quantity: newQuantity
+        });
+      }
     });
   }
 }
