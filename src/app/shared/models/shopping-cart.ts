@@ -17,7 +17,6 @@ export class ShoppingCart {
         }
     }
 
-
     get totalItemsCount() {
         let count = 0;
         for (let productId in this.items)

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 import { Product } from 'shared/models/product';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { take, map } from 'rxjs/operators';
 import { ShoppingCart } from 'shared/models/shopping-cart';
 import { ShoppingCartItem } from 'shared/models/shopping-cart-item';
@@ -15,6 +15,7 @@ export class ShoppingCartService {
 
   async getCart(): Promise<Observable<ShoppingCart>> {
     let cartId = await this.getOrCreateCartId();
+
     return this.db.object('/shopping-carts/' + cartId)
       .valueChanges()
       .map((x: ShoppingCart) => new ShoppingCart(x));
@@ -46,10 +47,8 @@ export class ShoppingCartService {
 
   private async getOrCreateCartId(): Promise<string> {
     let cartId = localStorage.getItem('cartId');
-
     // return current cart Id
     if (cartId) return cartId;
-
     // if no cart id, create new id and set it in local storage
     let result = await this.create();
     localStorage.setItem('cartId', result.key);
