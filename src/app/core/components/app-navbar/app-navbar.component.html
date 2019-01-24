@@ -24,17 +24,22 @@
                 <a class="nav-link" routerLink="/login">Login</a>
               </li>
             </ng-template>
-            <li ngbDropdown *ngIf="appUser; else anonymousUser" class="nav-item dropdown">
-              <a ngbDropdownToggle class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ appUser.displayName }}</a>
-              <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdown01">
-                <a class="dropdown-item" routerLink="/my/orders">My Orders</a>
-                <ng-container *ngIf="appUser.isAdmin">
+            <ng-container *ngIf="appUser; else anonymousUser">
+              <li ngbDropdown class="nav-item dropdown">
+                <a ngbDropdownToggle class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ appUser.displayName }}</a>
+                <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdown01">
+                  <a class="dropdown-item" routerLink="/my/orders">My Orders</a>                
+                  <a class="dropdown-item" (click)="logout()">Log Out</a>
+                </div>
+              </li>
+              <li *ngIf="appUser.isAdmin" ngbDropdown class="nav-item dropdown">
+                <a ngbDropdownToggle class="nav-link dropdown-toggle" id="dropdown02" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin CP</a>
+                <div ngbDropdownMenu class="dropdown-menu" aria-labelledby="dropdown02">
                   <a class="dropdown-item" routerLink="/admin/orders">Manage Orders</a>
                   <a class="dropdown-item" routerLink="/admin/products">Manage Products</a>
-                </ng-container>
-                <a class="dropdown-item" (click)="logout()">Log Out</a>
-              </div>
-            </li>
+                </div>                
+              </li>
+            </ng-container>
           </ul>
         <!-- search form: disabled
         <form class="form-inline my-2 my-lg-0">

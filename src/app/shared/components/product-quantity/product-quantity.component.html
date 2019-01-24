@@ -1,19 +1,19 @@
 <div class="row no-gutters">
-  <div [ngClass]="{'col-8': !shoppingCartList, 'col-6': shoppingCartList}">
-    <span *ngIf="!shoppingCartList">In Cart: </span>{{ shoppingCart.getQuantity(product) }}
+  <div class="pl-3" [ngClass]="{'col-8': !shoppingCartList, 'col-6': shoppingCartList}">
+    <span *ngIf="!shoppingCartList" class="align-middle">In Cart: </span><span class="align-middle">{{ shoppingCart.getQuantity(product) }}</span>
   </div>
   <div 
     class="pr-1" 
     [ngClass]="{'col-3': shoppingCartList, 'col-2': !shoppingCartList}">
     <button 
       (click)="removeFromCart(product)" 
-      class="btn btn-secondary btn-sm btn-block font-weight-bold">-</button>
+      class="btn btn-info btn-sm btn-block font-weight-bold">-</button>
   </div>
   <div 
     class="pl-1" 
     [ngClass]="{'col-3': shoppingCartList, 'col-2': !shoppingCartList}">
     <button 
       (click)="addToCart()" 
-      class="btn btn-secondary btn-sm btn-block font-weight-bold">+</button>
+      class="btn btn-info btn-sm btn-block font-weight-bold">+</button>
   </div>
 </div>

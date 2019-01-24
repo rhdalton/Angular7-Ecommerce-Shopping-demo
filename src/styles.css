@@ -4,3 +4,8 @@
 @import '~font-awesome/css/font-awesome.css';
 
 body { padding-top:80px; }
+
+.list-group-item.active {
+    background-color: #117a8b;
+    border-color: #10707f;
+}
