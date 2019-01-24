@@ -21,7 +21,7 @@ export class OrderService {
 
   getOrdersByUser(userId: string) {
     return this.db.list('/orders', ref => {
-      return ref.orderByChild('userId');
+      return ref.orderByChild('userId').equalTo(userId);
     });
   }
 }

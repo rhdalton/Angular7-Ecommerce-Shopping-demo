@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase';
 import { Observable } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -21,11 +21,39 @@ export class AuthService {
     this.user$ = afAuth.authState;
   }
 
-  login() {
-    let returnUrl = this.router.snapshot.queryParamMap.get('returnUrl') || '/';
-    localStorage.setItem('returnUrl', returnUrl);
+  login(credentials) {
+    this.redirectHome();
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(credentials.email, credentials.password)
+      .catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        if (errorCode === 'auth/wrong-password') {
+          console.log('Wrong password.');
+        } else {
+          console.log(errorMessage);
+        }
+    });
+  }
 
+  loginGoogle() {
+    this.redirectHome();
     this.afAuth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+  }
+
+  registerUser(credentials) {
+    this.redirectHome();
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(credentials.email, credentials.password)
+      .catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(errorMessage);
+    });
   }
 
   logout() {
@@ -38,5 +66,10 @@ export class AuthService {
         if (user) return this.userService.get(user.uid);
         return Observable.of(null);
       });
+  }
+
+  redirectHome() {
+    let returnUrl = this.router.snapshot.queryParamMap.get('returnUrl') || '/';
+    localStorage.setItem('returnUrl', returnUrl);
   }
 }
