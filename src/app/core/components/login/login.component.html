@@ -1,19 +1,25 @@
 
 <h1>Login:</h1>
-<form #f="ngForm" (ngSubmit)="login(f.value)">
-  <div class="form-group">
-    <label for="email">Email</label>
-    <input #email="ngModel" (ngModel)="email" name="email" id="email" type="text" class="form-control" required>
-    <div class="alert alert-danger" *ngIf="email.touched && email.invalid">Email is required.</div>
-  </div>
-  <div class="form-group">
-    <label for="password">Password</label>
-    <input #password="ngModel" (ngModel)="password" name="password" id="password" type="text" class="form-control" required>
-    <div class="alert alert-danger" *ngIf="password.touched && password.invalid">Password is required.</div>
-  </div>
-  <button class="btn btn-primary">Log in</button>
-</form>
 
-<button 
+<div class="row">
+  <div class="col-6">
+      <form #f="ngForm" (ngSubmit)="login(f.value)">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input #email="ngModel" (ngModel)="email" name="email" id="email" type="text" class="form-control" required>
+            <div class="alert alert-danger" *ngIf="email.touched && email.invalid">Email is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input #password="ngModel" (ngModel)="password" name="password" id="password" type="text" class="form-control" required>
+            <div class="alert alert-danger" *ngIf="password.touched && password.invalid">Password is required.</div>
+          </div>
+          <button class="btn btn-info">Log in</button>
+        </form>
+  </div>
+  <div class="col-6">
+    <button 
   (click)="loginGoogle()" 
-  class="btn btn-primary">Login with Google</button>
+  class="btn btn-outline-info">Login with Google</button>
+  </div>
+</div>
