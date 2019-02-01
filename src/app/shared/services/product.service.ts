@@ -37,5 +37,3 @@ export class ProductService {
     return this.db.object('/products/' + productId).remove();
   }
 }
-
-
