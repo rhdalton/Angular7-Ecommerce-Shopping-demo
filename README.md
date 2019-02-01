@@ -1,4 +1,4 @@
-# E-Commerce Shop Demo
+# E-Commerce Shop App Sample
 
 This is an E-Commerce Shopping app in Angular and deployed on Firebase to show common functionality of Angular and Typescript.
 You can see an example deployment at https://ec-shop-demo.firebaseapp.com/
